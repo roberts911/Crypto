@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konwerter kryptowalut</title>
+</head>
+<body>
+    <a href="{% url 'crypto_list' %}">Powrót do listy kryptowalut</a>
+    <a href="{% url 'crypto_chart' %}">Przejdź do wykresów kryptowalut</a>
+    <h1>Konwerter kryptowalut na PLN</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="from_currency">Waluta:</label>
+        <select id="from_currency" name="from_currency" required>
+            {% for crypto_id, symbol, name in crypto_list %}
+            <option value="{{ crypto_id }}" {% if request.POST.from_currency == crypto_id %}selected{% endif %}>{{ name }} ({{ symbol }})</option>
+            {% endfor %}
+        </select>
+        <label for="amount">Kwota:</label>
+        <input type="number" id="amount" name="amount" step="0.000001" required>
+        <button type="submit">Konwertuj</button>
+    </form>
+    {% if error_message %}
+    <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+    {% if converted_amount %}
+    <p>{{ amount }} {{ from_currency }} to {{ converted_amount|floatformat:2 }} PLN</p>
+    {% endif %}
+</body>
+</html>
