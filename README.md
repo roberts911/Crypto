@@ -2,13 +2,22 @@
 
 This is a simple Django web application that provides up-to-date cryptocurrency rates and a currency converter. The application fetches cryptocurrency data from the CoinGecko API, and also includes functionalities for caching and asynchronously fetching data to improve performance.
 
+![image](https://github.com/roberts911/Cryptocurrencies/assets/85109223/16eeccb8-e23a-47b4-a390-1b5147af32e1)
+
+
 ## Features
 
 1. **Cryptocurrency List:** The application fetches a list of cryptocurrencies along with their current prices in PLN. 
 
 2. **Currency Converter:** Allows conversion of a given amount of a selected cryptocurrency to PLN.
 
+![image](https://github.com/roberts911/Cryptocurrencies/assets/85109223/44827856-40b0-4e97-86a5-ee9761ea327d)
+
+
 3. **Cryptocurrency Chart:** Displays a chart of a selected cryptocurrency's price over a selected number of days.
+
+![image](https://github.com/roberts911/Cryptocurrencies/assets/85109223/58df0dc3-ab29-4c6c-8870-54899fab3f0f)
+
 
 ## Tech Stack
 
