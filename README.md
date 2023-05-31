@@ -20,7 +20,7 @@ This is a simple Django web application that provides up-to-date cryptocurrency 
 
 4. **Libraries:** PyCoinGecko, Plotly, httpx, Django's built-in caching framework.
 
-## Usage
+## Instruction
 
 1. Clone the repository to your local machine.
 
@@ -41,8 +41,6 @@ This is a simple Django web application that provides up-to-date cryptocurrency 
     ```
 
 4. Open a web browser and navigate to `localhost:8000` to access the application.
-
-## Screenshots
 
 ## Author
 
