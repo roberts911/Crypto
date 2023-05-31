@@ -33,7 +33,7 @@
         <p style="color: red;">{{ error_message }}</p>
         {% endif %}
         {% if converted_amount %}
-        <p>{{ amount }} {{ from_currency }} is {{ converted_amount|floatformat:2 }} PLN</p>
+        <p>{{ amount }} {{ from_currency }} = {{ converted_amount|floatformat:2 }} PLN</p>
         {% endif %}
     </div>
 </body>
