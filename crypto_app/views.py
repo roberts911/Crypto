@@ -8,6 +8,10 @@ import httpx
 import asyncio
 
 def crypto_list(request):
+    """
+    Fetches crypto data from cache if available, otherwise fetches from API and stores in cache.
+    Renders the 'crypto_list' template with the fetched crypto data.
+    """
     crypto_data = cache.get('crypto_data')
 
     if crypto_data is None:
@@ -20,15 +24,31 @@ def crypto_list(request):
     return render(request, 'crypto_app/crypto_list.html', context)
 
 def get_crypto_list():
-    url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false"
-    response = requests.get(url)
-    if response.status_code == 200:
-        crypto_data = response.json()
-        return [(crypto['id'], crypto['symbol'].lower(), crypto['name']) for crypto in crypto_data]
-    else:
-        return []
+    """
+    Returns a list of crypto data, fetching from cache if available, otherwise fetches from API and stores in cache.
+    Each crypto datum is a tuple of (id, symbol, name).
+    """
+    crypto_data = cache.get('crypto_data')
+
+    if crypto_data is None:
+        url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=pln&order=market_cap_desc&per_page=20&page=1&sparkline=false"
+        response = requests.get(url)
+        if response.status_code == 200:
+            crypto_data = response.json()
+            cache.set('crypto_data', crypto_data, 300)  # Cache data for 5 minutes
+        else:
+            return []
+
+    return [(crypto['id'], crypto['symbol'].lower(), crypto['name']) for crypto in crypto_data]
+
 
 def crypto_convert(request):
+    """
+    Handles the conversion of a given amount of a selected cryptocurrency to another currency.
+    Fetches the list of available cryptocurrencies and conversion rates from an API.
+    On POST request, validates form data and performs conversion.
+    Renders the 'crypto_convert' template with conversion results or error messages.
+    """
     crypto_list = get_crypto_list()
 
     if not crypto_list:
@@ -74,6 +94,9 @@ def crypto_convert(request):
 cg = CoinGeckoAPI()
 
 async def async_get_coins_list():
+    """
+    Asynchronously fetches a list of coins from cache if available, otherwise fetches from API and stores in cache.
+    """
     coins = cache.get('coins_list')
     if not coins:
         async with httpx.AsyncClient() as client:
@@ -86,6 +109,10 @@ async def async_get_coins_list():
     return coins
 
 async def async_get_coin_data(selected_coin, days):
+    """
+    Asynchronously fetches coin data for a selected coin and number of days from cache if available,
+    otherwise fetches from API and stores in cache.
+    """
     cache_key = f'coin_data_{selected_coin}_{days}'
     coin_data = cache.get(cache_key)
     if not coin_data:
@@ -96,6 +123,11 @@ async def async_get_coin_data(selected_coin, days):
     return coin_data
 
 def crypto_chart(request):
+    """
+    Fetches coin data and renders a chart of coin price over time.
+    Coin data is fetched asynchronously from cache if available, otherwise fetched from API and stored in cache.
+    Renders the 'crypto_chart' template with the chart and related data.
+    """
     selected_coin = request.GET.get('coin', 'bitcoin')  # Domyślnie 'bitcoin'
     selected_days = request.GET.get('days', '30')  # Domyślnie '30'
 
@@ -111,7 +143,7 @@ def crypto_chart(request):
     price_x = [price[0] for price in prices]
     price_y = [price[1] for price in prices]
 
-    fig = px.line(x=price_x, y=price_y, labels={'x': 'Data', 'y': 'Cena w PLN'}, title=f'Kurs {selected_coin.upper()} w ciągu {selected_days} dni')
+    fig = px.line(x=price_x, y=price_y, labels={'x': 'Date', 'y': 'Price in PLN'}, title=f'{selected_coin.upper()} exchange rate over the past {selected_days} days')
     fig.update_xaxes(type='date')
 
     plot_div = fig.to_html(full_html=False)

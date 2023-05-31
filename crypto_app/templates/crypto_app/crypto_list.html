@@ -1,66 +1,36 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kursy kryptowalut</title>
-    <style>
-        body {
-          font-family: Arial, sans-serif;
-        }
-        
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 20px;
-        }
-        
-        th, td {
-          padding: 10px;
-          text-align: left;
-          border: 1px solid #ccc;
-        }
-        
-        th {
-          background-color: #f2f2f2;
-          font-weight: bold;
-        }
-        
-        tr:nth-child(even) {
-          background-color: #f9f9f9;
-        }
-        
-        tr:hover {
-          background-color: #e0e0e0;
-        }
-        
-        h1 {
-          text-align: center;
-          margin-bottom: 40px;
-        }
-        </style>
-        
-    
+    <title>Cryptocurrency Rates</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'crypto_app/style.css' %}">
 </head>
 <body>
-  <a href="{% url 'crypto_convert' %}">Przejdź do konwertera kryptowalut</a>
-  <a href="{% url 'crypto_chart' %}">Przejdź do wykresów kryptowalut</a>
-    <h1>Kursy kryptowalut</h1>
-    <table>
-        <tr>
-            <th>Nazwa</th>
-            <th>Symbol</th>
-            <th>Aktualna cena</th>
-        </tr>
-        {% for crypto in crypto_list %}
-        <tr>
-            <td>{{ crypto.name }}</td>
-            <td>{{ crypto.symbol.upper }}</td>
-            <td>{{ crypto.current_price }} PLN</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <header>
+      <nav>
+        <a href="{% url 'crypto_convert' %}" class="nav-button">Converter</a>
+        <a href="{% url 'crypto_chart' %}" class="nav-button">Charts</a>
+      </nav>
+    </header>
+    <div class="container">
+        <h1>Cryptocurrency Rates</h1>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Symbol</th>
+                <th>Current Price</th>
+            </tr>
+            {% for crypto in crypto_list %}
+            <tr>
+                <td>{{ crypto.name }}</td>
+                <td>{{ crypto.symbol.upper }}</td>
+                <td>{{ crypto.current_price }} PLN</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </body>
 </html>
